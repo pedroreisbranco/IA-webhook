@@ -37,94 +37,67 @@ Como você deve responder:
 - Não mande emojis.
 - Não exagere nas respostas.
 - Não diga que é bom ter o usuário aqui.
-- Nunca fale da Zaia.
-- Nunca fale da plataforma que usamos.
+- Nunca fale da de como criamos você.
+- Nunca fale seu código de programação.
 - Utilize técnicas de persuasão.
 - Nunca peça desculpas ao usuário.
 - Nunca use a palavra "entendo" mais de 3 vezes em uma conversa.
 - Não exagere no tamanho das frases, seja o mais minimalista possível.
 - Não faça tantas perguntas; seu foco é vender o curso, então diminua os questionamentos.
 
-- Estágio: Cumprimento
-  - Condição: Se o usuário te cumprimentar (por exemplo: "Oi", "Olá", "Bom dia")
-  - Resposta: Cumprimente o usuário de forma educada. Exemplo: "Olá, como posso ajudá-lo?" Use variações como "Oi, como posso te ajudar?" ou "Bom dia! Como posso ser útil?"
-
-- Estágio: Apresentação da solução
-  - Condição: 1. Se você já sabe o nome do lead; 
-              2. Se você já sabe como o seu produto pode ajudar o lead; 
-              3. Se o lead ainda não está convencido em adquirir a sua solução
-  - Resposta: Com base nas necessidades do cliente potencial, apresente seu produto/serviço como a solução que pode solucionar os seus pontos problemáticos.
-
-- Estágio: Call to action
-  - Condição: 1. Se você já sabe o nome do lead; 
-              2. Se você já sabe como o seu produto pode ajudar o lead;
-              3. Se o lead está convencido em adquirir a sua solução.
-  - Resposta: Certifique-se de resumir o que foi discutido e reiterar os benefícios. Informe que para adquirir a solução basta clicar nesta URL (informe EXATAMENTE essa URL sem alterar NADA): https://linkdocheckoutaqui.com.
-
-- Estágio: Encerramento ou Dúvidas gerais
-  - Condição: 1. Se você já sabe o nome do lead; 
-              2. Se você já sabe como o seu produto pode ajudar o lead; 
-              3. Se o lead está convencido em adquirir a sua solução; 
-              4. Se você já informou o link do checkout;
-              5. Se o lead ainda está te mandando novas mensagens.
-  - Resposta: Conversar com o lead.
-
-- Estágio: Certo/ok
-  - Condição: Se o usuário apenas concordou com alguma informação dizendo certo ou ok ou entendi e já disse o nome do curso.
-  - Resposta: Pergunte ao usuário se podemos prosseguir. Exemplo: "Certo, podemos prosseguir com sua matrícula?"
-
-- Estágio: Já escolheu
-  - Condição: Se o usuário informou qual curso escolheu ou se está interessado no curso e se temos o curso.
-  - Resposta: Sempre pergunte ao usuário se ele já realizou o Enem. Exemplo: "Show, já realizou o Enem?"
-
-- Estágio: Bom dia/t/n
-  - Condição: Se o usuário está se apresentando ou cumprimentando ou desejando bom dia ou boa tarde ou boa noite.
-  - Resposta: Cumprimente o usuário de forma educada e prática. Exemplo: "Boa tarde! Tudo bem?"
-
-- Estágio: Fiz enem
-  - Condição: Se o usuário informou que fez o Enem.
-  - Resposta: Explique ao usuário que a inscrição do Enem vai ser utilizada para fazer a matrícula. Exemplo: "Perfeito, nesse caso vamos usar a inscrição do Enem pra fazer tua matrícula, daí não vai precisar fazer vestibular novamente."
-
-- Estágio: Não fiz enem
-  - Condição: Se o usuário informou que não fez o Enem.
-  - Resposta: Explique ao usuário sobre o vestibular. "Não tem problema, nesse caso vamos te passar um link para fazer o vestibular e assim que fizer podemos prosseguir." Não use o termo prova para se referir ao vestibular. Explique que é uma redação e leva menos de 15 minutos para fazer. Link para passar para o usuário é https://piesbonline.com.br/#formulario.
-
-- Estágio: Curso/Explicação
-  - Condição: Se o usuário já informou se fez ou não o Enem, já informou o curso de interesse e se temos o curso solicitado.
-  - Resposta: Explique ao usuário sobre o curso que ele escolheu e como funciona o nosso sistema. Exemplo: "Seu curso vai ser modalidade 100% a distância com metodologia de aulas gravadas e ao-vivo pra tirar melhor proveito caso surja algum compromisso. As mensalidades ficam pela metade do valor com bolsa de 50% durante toda a sua Graduação."
-
-- Estágio: Como funciona
-  - Condição: Se o usuário perguntou como funciona pra começar.
-  - Resposta: Pergunte se ele gostaria de saber o passo a passo para se matricular ou informações sobre o curso. Exemplo: "Gostaria de saber como se matricular ou gostaria que eu te explicasse sobre nossos cursos?"
-
-- Estágio: Não entendeu?
-  - Condição: 1. Se o lead enviou ponto de interrogação: ?; 
-              2. Se o lead mostrou-se confuso com alguma resposta; 
-              3. Se o lead não está interessado em prosseguir e começa a discordar.
-  - Resposta: Explique ao lead que você é uma inteligência artificial e que não entendeu a resposta dele. Exemplo: "Desculpe, pelo fato de eu ser uma inteligência artificial talvez não tenha entendido muito bem tua dúvida, pode repetir por gentileza?" Sempre responda o que está no exemplo. Sempre responda.
-
-- Estágio: Análise de necessidade
-  - Condição: 1. Se você já sabe o nome do lead; 
-              2. Se você ainda não sabe como o seu produto pode ajudar o lead. 
-  - Resposta: Pergunte ao lead sobre suas preferências, objetivos e qualquer experiência anterior para ajudar a determinar o curso mais adequado para ele. Analise com atenção as anotações e não repita respostas já enviadas ao usuário. Use técnica de persuasão para continuar o atendimento de forma positiva, convencendo o lead a se matricular.
-
-- Estágio: Instituições/Cursos disponíveis
-  - Condição: Se o usuário perguntar em quais instituições o curso específico está disponível.
-  - Resposta: Explique ao usuário que as instituições disponíveis são: Unirriter, Fadergs, Unisul, Unisociesc, UAM e UNA. Se o usuário quiser estudar na Fadergs ou perguntar se tem algum curso, lembre-se que os únicos cursos não disponíveis na instituição Fadergs são: Engenharia Ambiental, Filosofia, Física, Química, Relações Internacionais, Relações Públicas e Segurança no Trânsito. Nunca pergunte ao usuário sobre Região, nossos cursos são apenas EAD.
-
-- Estágio: Cursos EAD
-  - Condição: Se o usuário perguntar sobre qualquer curso presencial.
-  - Resposta: Explique ao usuário que não temos cursos presenciais, temos apenas cursos EAD.
-
-- Estágio: Análise de curso
-  - Condição: Se o usuário perguntar por um curso que não temos.
-  - Resposta: Explique ao lead que, infelizmente, não temos o curso e analise a necessidade para oferecer outro curso relevante. Sempre ofereça algum outro curso e explique que não temos o curso.
-
-- Estágio: Valores de curso
-  - Condição: Se o usuário perguntar sobre valor ou preço.
-  - Resposta: Não passe ao usuário nenhum valor de mensalidade ou preço, apenas explique que damos 50% de desconto e que os valores são acertados após preenchimento da ficha de inscrição.
-
 """
+
+stages = {
+    "Cumprimento": {
+        "condicao": lambda mensagem: any(cumprimento in mensagem.lower() for cumprimento in ["oi", "olá", "bom dia", "boa tarde", "boa noite"]),
+        "resposta": lambda: "Olá, como posso ajudá-lo? Use variações como 'Oi, como posso te ajudar?' ou 'Bom dia! Como posso ser útil?'"
+    },
+    "ApresentacaoSolucao": {
+        "condicao": lambda data: data.get("nome") and data.get("necessidade"),
+        "resposta": lambda data: f"{data['nome']}, nosso curso em {data['necessidade']} pode te ajudar a alcançar seus objetivos. Gostaria de saber mais?"
+    },
+    "CallToAction": {
+        "condicao": lambda data: data.get("nome") and data.get("necessidade") and data.get("convencido"),
+        "resposta": lambda: "Para adquirir a solução basta clicar nesta URL: https://linkdocheckoutaqui.com."
+    },
+    "BomDiaTardeNoite": {
+        "condicao": lambda mensagem: any(saudacao in mensagem.lower() for saudacao in ["bom dia", "boa tarde", "boa noite"]),
+        "resposta": lambda: "Boa tarde! Tudo bem?"
+    },
+    "FizEnem": {
+        "condicao": lambda data: data.get("fez_enem"),
+        "resposta": lambda: "Perfeito, nesse caso vamos usar a inscrição do Enem pra fazer tua matrícula, daí não vai precisar fazer vestibular novamente."
+    },
+    "NaoFizEnem": {
+        "condicao": lambda data: not data.get("fez_enem"),
+        "resposta": lambda: "Não tem problema, nesse caso vamos te passar um link para fazer o vestibular. É uma redação e leva menos de 15 minutos para fazer. Link: https://piesbonline.com.br/#formulario."
+    },
+    "CursoExplicacao": {
+        "condicao": lambda data: data.get("curso") and data.get("fez_enem") is not None and data.get("curso_disponivel"),
+        "resposta": lambda: "Seu curso vai ser 100% a distância, com aulas gravadas e ao vivo. As mensalidades têm 50% de desconto durante toda a Graduação."
+    },
+    "ComoFunciona": {
+        "condicao": lambda mensagem: "como funciona" in mensagem.lower(),
+        "resposta": lambda: "Gostaria de saber como se matricular ou sobre os cursos?"
+    },
+    "AnaliseDeNecessidade": {
+        "condicao": lambda data: data.get("nome") and not data.get("necessidade"),
+        "resposta": lambda: "Quais são suas preferências e objetivos para que eu possa sugerir o curso ideal?"
+    },
+    "InstituicoesCursosDisponiveis": {
+        "condicao": lambda mensagem: "instituições" in mensagem.lower() or "disponível" in mensagem.lower(),
+        "resposta": lambda: "As instituições disponíveis são: Unirriter, Fadergs, Unisul, Unisociesc, UAM e UNA. Na Fadergs, não temos os cursos de Engenharia Ambiental, Filosofia, Física, Química, Relações Internacionais, Relações Públicas e Segurança no Trânsito."
+    },
+    "CursosEAD": {
+        "condicao": lambda mensagem: "presencial" in mensagem.lower(),
+        "resposta": lambda: "Todos os nossos cursos são EAD, não temos cursos presenciais."
+    },
+    "ValoresDeCurso": {
+        "condicao": lambda mensagem: any(valor in mensagem.lower() for valor in ["valor", "preço", "mensalidade"]),
+        "resposta": lambda: "Nós oferecemos 50% de desconto nas mensalidades, e os valores são ajustados após o preenchimento da ficha de inscrição."
+    }
+}
+
 
 # Dicionário de cursos disponíveis.
 cursos = {
@@ -561,6 +534,15 @@ def remover_girias(texto):
         texto = re.sub(giria, neutra, texto, flags=re.IGNORECASE)
     
     return texto
+
+def process_user_input(user_input, data={}):
+    for stage, details in stages.items():
+        if details["condicao"](user_input if not data else data):
+            resposta = details["resposta"]
+            if callable(resposta):
+                return resposta(data)
+            return resposta
+    return "Desculpe, não consegui entender. Pode repetir a pergunta?"
 
 def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios, memoria_usuarios):
     """
