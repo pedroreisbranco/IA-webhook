@@ -17,7 +17,6 @@ client = openai
 app = Flask(__name__)
 
 contexto_usuarios = {}
-memoria_usuarios = {}
 
 prompts = """
 
@@ -49,7 +48,7 @@ Como você deve responder:
 
 """
 
-stages = {
+estágios = {
     "ApresentacaoSolucao": {
         "condicao": lambda data: data.get("nome") and data.get("necessidade"),
         "resposta": lambda data: f"{data['nome']}, nosso curso em {data['necessidade']} pode te ajudar a alcançar seus objetivos. Gostaria de saber mais?"
@@ -530,9 +529,6 @@ def remover_girias(texto):
     
     return texto
 
-def reset_memoria_usuarios():
-    global memoria_usuarios
-    memoria_usuarios = {}  
     
 def process_user_input(user_input, data):
     # Verifique se data é um dicionário
@@ -551,7 +547,7 @@ def process_user_input(user_input, data):
     # Se nenhuma condição foi atendida, você pode retornar uma mensagem padrão
     return "Desculpe, não consegui entender sua solicitação."
 
-def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios, memoria_usuarios):
+def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios):
     """
     Processa a conversa considerando o contexto do usuário, os cursos disponíveis e o prompt inicial.
 
@@ -561,10 +557,10 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
         prompt (str): Prompt inicial do sistema.
         cursos (dict): Dicionário de cursos disponíveis.
         contexto_usuarios (dict): Dicionário que armazena o contexto de cada usuário.
-        memoria_usuarios (dict): Dicionário que armazena informações específicas mencionadas pelos usuários.
+
 
     Returns:
-        str: Resposta gerada baseada no contexto e na memória.
+        str: Resposta gerada baseada no contexto.
     """
     
     # Remove gírias do input do usuário
@@ -584,25 +580,7 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
     # Adiciona a mensagem do usuário ao contexto
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
     
-    if "reiniciar memória" in user_input_lower:
-        reset_memoria_usuarios()  # Chama a função para reiniciar a memória
-        return "Histórico de memória foi limpo."
-
     
-    if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
-        historico_mensagens = "\n".join([msg['content'] for msg in contexto_usuarios[from_number] if msg['role'] == 'user'])
-        resposta = f"Você mencionou as seguintes mensagens anteriormente: {historico_mensagens}"
-        return resposta
-    
-    for item in memoria_usuarios.get(from_number, []):
-        if item.lower() in user_input.lower():
-            resposta = f"Você me perguntou anteriormente sobre {item}. Aqui estão as informações: {cursos.get(item, 'Desculpe, não encontrei informações sobre isso.')}"
-            return resposta
-
-    resposta_stage = process_user_input(user_input, memoria_usuarios.get(from_number, {}))
-    
-    if resposta_stage:
-        return resposta_stage
     # Prepara o histórico de mensagens para enviar à API da OpenAI
     mensagens = contexto_usuarios[from_number]
 
@@ -652,7 +630,7 @@ def handle_incoming_message(incoming_payload):
     if mensagem_concatenada and from_number:
 
         # Processar a conversa com todas as mensagens concatenadas
-        resposta = processar_conversa(mensagem_concatenada, from_number, prompts, cursos, contexto_usuarios, memoria_usuarios)
+        resposta = processar_conversa(mensagem_concatenada, from_number, prompts, cursos, contexto_usuarios)
         
         # Retornar apenas uma resposta concatenada
         return {
