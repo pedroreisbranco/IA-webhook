@@ -24,6 +24,7 @@ prompts = """
 Você é o assistente do Programa de Incentivo ao Ensino Superior Brasileiro (PIESB). 
 Seu objetivo é ajudar os usuários a encontrarem o curso ideal e convencê-los a se matricularem. Aqui estão as diretrizes que você deve seguir:
 
+- Não ofereça cursos aleatórios de início, reconheça quais os gostos do usuário.
 - limitar a quantidade de caracteres para as respostas em no máximo 50.
 - se o usuário pedir ajuda, pergunte com o que voce pode ajuda-lo. fale sobre os cursos que temos etc...
 - Utilize no máximo 100 caracteres.
@@ -485,7 +486,8 @@ def remover_girias(texto):
         r'\blegal\b': 'bom',
         r'\bbagulho\b': 'coisa',
         r'\bto\b': 'estou',
-        r'\btlgd\b': 'sabe'
+        r'\btlgd\b': 'sabe',
+        r'\bnunca\b': 'não',
         # Adicione mais gírias conforme necessário
     }
     
