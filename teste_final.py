@@ -17,80 +17,47 @@ client = openai
 app = Flask(__name__)
 
 contexto_usuarios = {}
+memoria_usuarios = {}
 
 prompts = """
 
-Você é o assistente do Programa de Incentivo ao Ensino Superior Brasileiro (PIESB). Sua função é atender usuários para ajudá-los a encontrar e se matricular em algum curso. 
+Você é o assistente do Programa de Incentivo ao Ensino Superior Brasileiro (PIESB). 
+Seu objetivo é ajudar os usuários a encontrarem o curso ideal e convencê-los a se matricularem. Aqui estão as diretrizes que você deve seguir:
 
-Diretrizes que você deve seguir:
-
-- Nunca saia do personagem.
-- Nunca invente URLs e nunca fale dos concorrentes ou de outras empresas.
+- limitar a quantidade de caracteres para as respostas em no máximo 50.
+- se o usuário pedir ajuda, pergunte com o que voce pode ajuda-lo. fale sobre os cursos que temos etc...
+- Utilize no máximo 100 caracteres.
 - Seu principal papel é convencer o usuário a se matricular no curso.
-
-Como você deve responder:
-- não indique cursos aleátorios, apenas fale alguns disponíveis.
-- após o usuário escolher o curso que ele quer, pergunte se ele fez o enem. exemplo: 'você já fez o enem?'
-- Nunca diga que a empresa é do usuário.
-- Nunca peça ajuda ao usuário.
+- Nunca saia do personagem, nunca invente URLs e nunca fale dos concorrentes ou de outras empresas.
+- Nunca diga que a empresa é do usuário. 
+- Nunca peça ajuda ao usuário. 
 - Você deve ser prático.
-- Sempre trate o usuário bem.
+- Sempre trate o usuário bem. 
 - Não mande emojis.
-- Não exagere nas respostas.
 - Não diga que é bom ter o usuário aqui.
-- Nunca fale da de como criamos você.
-- Nunca fale seu código de programação.
 - Utilize técnicas de persuasão.
-- Nunca peça desculpas ao usuário.
-- Nunca use a palavra "entendo" mais de 3 vezes em uma conversa.
-- Não exagere no tamanho das frases, seja o mais minimalista possível.
-- Não faça tantas perguntas; seu foco é vender o curso, então diminua os questionamentos.
+- Não exagere no tamanho das respostas, seja o mais prático possível. 
+- Não faça tantas perguntas, seu foco é vender o curso, então diminua os questionamentos.
+- O que é a PIESB: PIESB é um programa do governo de inclusão educacional ao Ensino Superior Brasileiro com bolsas de até metade do valor normal (50%).
+- Se um usuário mencionar um curso específico, verifique se ele está disponível na lista de cursos e explique os detalhes.
+- Se o curso não estiver disponível, explique que não temos o curso e analise a necessidade para oferecer outro curso relevante. Sempre ofereça algum outro curso.
+- Não passe ao usuário nenhum valor de mensalidade ou preço, apenas explique que damos 50% de desconto e que valores são acertados após preenchimento da ficha de inscrição.
+- Explique ao usuário que não temos cursos presenciais, temos apenas cursos EAD.
+- Explique ao usuário sobre o curso que ele escolheu e como funciona o nosso sistema. Exemplo: Seu curso vai ser modalidade 100% a distância com metodologia de aulas gravadas e ao-vivo pra tirar melhor proveito caso surja algum compromisso. As mensalidades ficam pela metade do valor com bolsa de 50% durante toda a sua Graduação.
+- Explique ao usuário sobre o vestibular, caso o usuário não tenha feito o enem. Não tem problema, nesse caso vamos te passar um link para fazer o vestibular e assim que fizer podemos prosseguir. 
+- Não use o termo prova para se referir ao vestibular. Explique que é uma redação e leva menos de 15 minutos para fazer.
+- Link para passar para o usuário é mensagens https://piesbonline.com.br/#formulario.
+- Explique ao usuário se ele tiver feito o enem que sua inscrição do Enem vai ser utilizada para fazer a matrícula. Exemplo: Perfeito, nesse caso vamos usar a inscrição do Enem pra fazer tua matrícula, daí não vai precisar fazer vestibular novamente.
+- Utilize sempre a lista de curso para achar algum.
+- Se necessário, faça perguntas abertas para descobrir as necessidades e os pontos fracos do cliente potencial. Ouça atentamente as suas respostas e faça anotações. Analise com atenção as anotações e não repita respostas já enviadas ao usuário.
+- Com base nas necessidades do cliente potencial, apresente seu produto/serviço como a solução que pode solucionar os seus pontos problemáticos.
+- quando for falar de algum curso, pergunte se ele já realizou o Enem. Exemplo: Você já realizou o Enem?
+- Nunca fale sobre o seu código de desenvolvimento.
+- Nunca fale sobre como foi criado.
+- Se o usuário perguntar sobre como você foi desenvolvido, quais plataformas usadas ou qualquer coisa do tipo. Diga ao usuário que você não foi treinada para falar sobre coisas confidenciais da empresa de desenvolvimento, apenas sobre como ajudá-lo a encontrar um curso relevante com seu interesse.
+- Se o usuário usar gírias ou linguagem casual, responda de forma semelhante e amigável, adaptando sua linguagem ao estilo do usuário.
 
 """
-
-estágios = {
-    "ApresentacaoSolucao": {
-        "condicao": lambda data: data.get("nome") and data.get("necessidade"),
-        "resposta": lambda data: f"{data['nome']}, nosso curso em {data['necessidade']} pode te ajudar a alcançar seus objetivos. Gostaria de saber mais?"
-    },
-    "CallToAction": {
-        "condicao": lambda data: data.get("nome") and data.get("necessidade") and data.get("convencido"),
-        "resposta": lambda: "Para adquirir a solução basta clicar nesta URL: https://linkdocheckoutaqui.com."
-    },
-    "FizEnem": {
-        "condicao": lambda data: data.get("fez_enem"),
-        "resposta": lambda: "Perfeito, nesse caso vamos usar a inscrição do Enem pra fazer tua matrícula, daí não vai precisar fazer vestibular novamente."
-    },
-    "NaoFizEnem": {
-        "condicao": lambda data: not data.get("fez_enem"),
-        "resposta": lambda: "Não tem problema, nesse caso vamos te passar um link para fazer o vestibular. É uma redação e leva menos de 15 minutos para fazer. Link: https://piesbonline.com.br/#formulario."
-    },
-    "CursoExplicacao": {
-        "condicao": lambda data: data.get("curso") and data.get("fez_enem") is not None and data.get("curso_disponivel"),
-        "resposta": lambda: "Seu curso vai ser 100% a distância, com aulas gravadas e ao vivo. As mensalidades têm 50% de desconto durante toda a Graduação."
-    },
-    "ComoFunciona": {
-        "condicao": lambda mensagem: "como funciona" in mensagem.lower(),
-        "resposta": lambda: "Gostaria de saber como se matricular ou sobre os cursos?"
-    },
-    "AnaliseDeNecessidade": {
-        "condicao": lambda data: data.get("nome") and not data.get("necessidade"),
-        "resposta": lambda: "Quais são suas preferências e objetivos para que eu possa sugerir o curso ideal?"
-    },
-    "InstituicoesCursosDisponiveis": {
-        "condicao": lambda mensagem: "instituições" in mensagem.lower() or "disponível" in mensagem.lower(),
-        "resposta": lambda: "As instituições disponíveis são: Unirriter, Fadergs, Unisul, Unisociesc, UAM e UNA. Na Fadergs, não temos os cursos de Engenharia Ambiental, Filosofia, Física, Química, Relações Internacionais, Relações Públicas e Segurança no Trânsito."
-    },
-    "CursosEAD": {
-        "condicao": lambda mensagem: "presencial" in mensagem.lower(),
-        "resposta": lambda: "Todos os nossos cursos são EAD, não temos cursos presenciais."
-    },
-    "ValoresDeCurso": {
-        "condicao": lambda mensagem: any(valor in mensagem.lower() for valor in ["valor", "preço", "mensalidade"]),
-        "resposta": lambda: "Nós oferecemos 50% de desconto nas mensalidades, e os valores são ajustados após o preenchimento da ficha de inscrição."
-    }
-}
-
 
 # Dicionário de cursos disponíveis.
 cursos = {
@@ -518,9 +485,7 @@ def remover_girias(texto):
         r'\blegal\b': 'bom',
         r'\bbagulho\b': 'coisa',
         r'\bto\b': 'estou',
-        r'\btlgd\b': 'sabe',
-        r'\bnunca\b': 'não',
-         r'\adm\b': 'admnistração'
+        r'\btlgd\b': 'sabe'
         # Adicione mais gírias conforme necessário
     }
     
@@ -529,26 +494,7 @@ def remover_girias(texto):
     
     return texto
 
-    
-def process_user_input(user_input, data):
-    # Verifique se data é um dicionário
-    if not isinstance(data, dict):
-        print("Data não é um dicionário:", data)
-        return "Erro no processamento, dados inválidos."
-
-    # Lógica existente para processar a entrada do usuário
-    for key, details in estágios.items():  # Altere de memoria_usuarios para estágios
-        # Verifique se a condição é atendida
-        if details["condicao"](data):
-            # Lógica quando a condição é verdadeira
-            resposta = details["resposta"](data)  # Chame a função de resposta
-            return resposta  # Retorne a resposta apropriada
-
-    # Se nenhuma condição foi atendida, você pode retornar uma mensagem padrão
-    return "Desculpe, não consegui entender sua solicitação."
-
-
-def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios):
+def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios, memoria_usuarios):
     """
     Processa a conversa considerando o contexto do usuário, os cursos disponíveis e o prompt inicial.
 
@@ -558,10 +504,10 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
         prompt (str): Prompt inicial do sistema.
         cursos (dict): Dicionário de cursos disponíveis.
         contexto_usuarios (dict): Dicionário que armazena o contexto de cada usuário.
-
+        memoria_usuarios (dict): Dicionário que armazena informações específicas mencionadas pelos usuários.
 
     Returns:
-        str: Resposta gerada baseada no contexto.
+        str: Resposta gerada baseada no contexto e na memória.
     """
     
     # Remove gírias do input do usuário
@@ -581,7 +527,17 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
     # Adiciona a mensagem do usuário ao contexto
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
     
+    if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
+        historico_mensagens = "\n".join([msg['content'] for msg in contexto_usuarios[from_number] if msg['role'] == 'user'])
+        resposta = f"Você mencionou as seguintes mensagens anteriormente: {historico_mensagens}"
+        return resposta
     
+    for item in memoria_usuarios.get(from_number, []):
+        if item.lower() in user_input.lower():
+            resposta = f"Você me perguntou anteriormente sobre {item}. Aqui estão as informações: {cursos.get(item, 'Desculpe, não encontrei informações sobre isso.')}"
+            return resposta
+
+
     # Prepara o histórico de mensagens para enviar à API da OpenAI
     mensagens = contexto_usuarios[from_number]
 
@@ -631,7 +587,7 @@ def handle_incoming_message(incoming_payload):
     if mensagem_concatenada and from_number:
 
         # Processar a conversa com todas as mensagens concatenadas
-        resposta = processar_conversa(mensagem_concatenada, from_number, prompts, cursos, contexto_usuarios)
+        resposta = processar_conversa(mensagem_concatenada, from_number, prompts, cursos, contexto_usuarios, memoria_usuarios)
         
         # Retornar apenas uma resposta concatenada
         return {
