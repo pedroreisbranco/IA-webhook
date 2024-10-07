@@ -18,6 +18,10 @@ app = Flask(__name__)
 
 contexto_usuarios = {}
 memoria_usuarios = {}
+def reset_memoria_usuarios():
+    global memoria_usuarios
+    memoria_usuarios = {}  # Limpa a memória dos usuários
+    print("Histórico de memória reiniciado.")
 
 prompts = """
 
