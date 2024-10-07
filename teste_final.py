@@ -529,14 +529,22 @@ def remover_girias(texto):
     
     return texto
 
-def process_user_input(user_input, data={}):
-    for stage, details in stages.items():
+def process_user_input(user_input, data):
+    # Verifique se data é um dicionário
+    if not isinstance(data, dict):
+        print("Data não é um dicionário:", data)
+        return "Erro no processamento, dados inválidos."
+
+    # Lógica existente para processar a entrada do usuário
+    for key, details in memoria_usuarios.items():
+        # Verifique se a condição é atendida
         if details["condicao"](user_input if not data else data):
+            # Lógica quando a condição é verdadeira
             resposta = details["resposta"]
-            if callable(resposta):
-                return resposta(data)
-            return resposta
-    return "Desculpe, não consegui entender. Pode repetir a pergunta?"
+            return resposta  # Retorne a resposta apropriada
+
+    # Se nenhuma condição foi atendida, você pode retornar uma mensagem padrão
+    return "Desculpe, não consegui entender sua solicitação."
 
 def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios, memoria_usuarios):
     """
@@ -572,7 +580,7 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
     
     # Primeiro, verifica se algum estágio pode gerar uma resposta apropriada
-    resposta_stage = process_user_input(user_input, memoria_usuarios.get(from_number, {}))
+
     
     if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
         historico_mensagens = "\n".join([msg['content'] for msg in contexto_usuarios[from_number] if msg['role'] == 'user'])
@@ -584,7 +592,7 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
             resposta = f"Você me perguntou anteriormente sobre {item}. Aqui estão as informações: {cursos.get(item, 'Desculpe, não encontrei informações sobre isso.')}"
             return resposta
 
-
+    resposta_stage = process_user_input(user_input, memoria_usuarios.get(from_number, {}))
     # Prepara o histórico de mensagens para enviar à API da OpenAI
     mensagens = contexto_usuarios[from_number]
 
