@@ -487,7 +487,7 @@ def remover_girias(texto):
         r'\bbagulho\b': 'coisa',
         r'\bto\b': 'estou',
         r'\btlgd\b': 'sabe',
-        r'\bnunca\b': 'não',
+        r'\bnunca\b': 'não'
         # Adicione mais gírias conforme necessário
     }
     
