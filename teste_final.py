@@ -537,15 +537,16 @@ def process_user_input(user_input, data):
         return "Erro no processamento, dados inválidos."
 
     # Lógica existente para processar a entrada do usuário
-    for key, details in memoria_usuarios.items():
+    for key, details in estágios.items():  # Altere de memoria_usuarios para estágios
         # Verifique se a condição é atendida
-        if details["condicao"](user_input if not data else data):
+        if details["condicao"](data):
             # Lógica quando a condição é verdadeira
-            resposta = details["resposta"]
+            resposta = details["resposta"](data)  # Chame a função de resposta
             return resposta  # Retorne a resposta apropriada
 
     # Se nenhuma condição foi atendida, você pode retornar uma mensagem padrão
     return "Desculpe, não consegui entender sua solicitação."
+
 
 def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios):
     """
