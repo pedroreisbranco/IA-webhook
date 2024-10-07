@@ -18,10 +18,6 @@ app = Flask(__name__)
 
 contexto_usuarios = {}
 memoria_usuarios = {}
-def reset_memoria_usuarios():
-    global memoria_usuarios
-    memoria_usuarios = {}  # Limpa a memória dos usuários
-    print("Histórico de memória reiniciado.")
 
 prompts = """
 
@@ -534,6 +530,10 @@ def remover_girias(texto):
     
     return texto
 
+def reset_memoria_usuarios():
+    global memoria_usuarios
+    memoria_usuarios = {}  
+    
 def process_user_input(user_input, data):
     # Verifique se data é um dicionário
     if not isinstance(data, dict):
@@ -584,7 +584,9 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
     # Adiciona a mensagem do usuário ao contexto
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
     
-    # Primeiro, verifica se algum estágio pode gerar uma resposta apropriada
+    if "reiniciar memória" in user_input_lower:
+        reset_memoria_usuarios()  # Chama a função para reiniciar a memória
+        return "Histórico de memória foi limpo."
 
     
     if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
@@ -598,6 +600,9 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
             return resposta
 
     resposta_stage = process_user_input(user_input, memoria_usuarios.get(from_number, {}))
+    
+    if resposta_stage:
+        return resposta_stage
     # Prepara o histórico de mensagens para enviar à API da OpenAI
     mensagens = contexto_usuarios[from_number]
 
