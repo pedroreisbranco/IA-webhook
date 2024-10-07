@@ -48,10 +48,6 @@ Como você deve responder:
 """
 
 stages = {
-    "Cumprimento": {
-        "condicao": lambda mensagem: any(cumprimento in mensagem.lower() for cumprimento in ["oi", "olá", "bom dia", "boa tarde", "boa noite"]),
-        "resposta": lambda: "Olá, como posso ajudá-lo? Use variações como 'Oi, como posso te ajudar?' ou 'Bom dia! Como posso ser útil?'"
-    },
     "ApresentacaoSolucao": {
         "condicao": lambda data: data.get("nome") and data.get("necessidade"),
         "resposta": lambda data: f"{data['nome']}, nosso curso em {data['necessidade']} pode te ajudar a alcançar seus objetivos. Gostaria de saber mais?"
@@ -59,10 +55,6 @@ stages = {
     "CallToAction": {
         "condicao": lambda data: data.get("nome") and data.get("necessidade") and data.get("convencido"),
         "resposta": lambda: "Para adquirir a solução basta clicar nesta URL: https://linkdocheckoutaqui.com."
-    },
-    "BomDiaTardeNoite": {
-        "condicao": lambda mensagem: any(saudacao in mensagem.lower() for saudacao in ["bom dia", "boa tarde", "boa noite"]),
-        "resposta": lambda: "Boa tarde! Tudo bem?"
     },
     "FizEnem": {
         "condicao": lambda data: data.get("fez_enem"),
@@ -526,7 +518,8 @@ def remover_girias(texto):
         r'\bbagulho\b': 'coisa',
         r'\bto\b': 'estou',
         r'\btlgd\b': 'sabe',
-        r'\bnunca\b': 'não'
+        r'\bnunca\b': 'não',
+         r'\adm\b': 'admnistração'
         # Adicione mais gírias conforme necessário
     }
     
@@ -576,6 +569,9 @@ def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuario
     
     # Adiciona a mensagem do usuário ao contexto
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
+    
+    # Primeiro, verifica se algum estágio pode gerar uma resposta apropriada
+    resposta_stage = process_user_input(user_input, memoria_usuarios.get(from_number, {}))
     
     if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
         historico_mensagens = "\n".join([msg['content'] for msg in contexto_usuarios[from_number] if msg['role'] == 'user'])
