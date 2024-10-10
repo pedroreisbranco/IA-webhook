@@ -9,8 +9,8 @@ import re
 
 # Defina a chave da API e o cliente
 
-MANYCHAT_TOKEN = '1510283:59a83de4e553639177190125a9550c0e' # Acessar o token de ambiente
-openai.api_key = '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'
+manychat_token = os.getenv('MANYCHAT_TOKEN') # Acessar o token de ambiente
+openai_api_key = os.getenv('OPENAI_API_KEY')
 
 client = openai
 # Inicializar Flask app.
