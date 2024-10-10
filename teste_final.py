@@ -499,67 +499,43 @@ def remover_girias(texto):
     return texto
 
 def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios, memoria_usuarios):
-    """
-    Processa a conversa considerando o contexto do usuário, os cursos disponíveis e o prompt inicial.
-
-    Args:
-        user_input (str): Mensagem enviada pelo usuário.
-        from_number (str): Número do telefone do usuário.
-        prompt (str): Prompt inicial do sistema.
-        cursos (dict): Dicionário de cursos disponíveis.
-        contexto_usuarios (dict): Dicionário que armazena o contexto de cada usuário.
-        memoria_usuarios (dict): Dicionário que armazena informações específicas mencionadas pelos usuários.
-
-    Returns:
-        str: Resposta gerada baseada no contexto e na memória.
-    """
-    
     # Remove gírias do input do usuário
     user_input = remover_girias(user_input)
-    
+
     user_input_lower = user_input.strip().lower()
-    
+
     if from_number not in contexto_usuarios:
-        # Se não houver contexto, inicializa o histórico do usuário com o prompt
         contexto_usuarios[from_number] = [{'role': 'system', 'content': prompt}]
         
-        # Adiciona a lista de cursos disponíveis ao contexto
         cursos_disponiveis = ", ".join(cursos.keys())
         cursos_info = f"Aqui estão os cursos disponíveis: {cursos_disponiveis}."
         contexto_usuarios[from_number].append({'role': 'system', 'content': cursos_info})
-    
-    # Adiciona a mensagem do usuário ao contexto
+
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
-    
-    if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
-        historico_mensagens = "\n".join([msg['content'] for msg in contexto_usuarios[from_number] if msg['role'] == 'user'])
-        resposta = f"Você mencionou as seguintes mensagens anteriormente: {historico_mensagens}"
-        return resposta
-    
-    for item in memoria_usuarios.get(from_number, []):
-        if item.lower() in user_input.lower():
-            resposta = f"Você me perguntou anteriormente sobre {item}. Aqui estão as informações: {cursos.get(item, 'Desculpe, não encontrei informações sobre isso.')}"
-            return resposta
 
+    # Adicionar a lógica para identificar o estágio
+    estagio, instrucao, explicacao = identificar_estagio(user_input)
 
-    # Prepara o histórico de mensagens para enviar à API da OpenAI
-    mensagens = contexto_usuarios[from_number]
+    # Se o estágio não for 'introducao', podemos usar o sistema de memória
+    if estagio == 'introducao':
+        resposta = f"Estágio: {estagio}\nCondição: {explicacao}\nInstrução: {instrucao}"
+    else:
+        # Prepara o histórico de mensagens para enviar à API da OpenAI
+        mensagens = contexto_usuarios[from_number]
 
-    try:
-        # Chama a API do OpenAI para gerar a resposta
-        resposta_IA = openai.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=mensagens,
-            max_tokens=1000,
-            temperature=0.7
-        )
+        try:
+            resposta_IA = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=mensagens,
+                max_tokens=1000,
+                temperature=0.7
+            )
 
-        # Extrai a resposta gerada pelo modelo
-        resposta = resposta_IA.choices[0].message.content
+            resposta = resposta_IA.choices[0].message.content
 
-    except Exception as e:
-        resposta = "Desculpe, ocorreu um erro ao gerar a resposta."
-        print(f"Erro: {str(e)}")
+        except Exception as e:
+            resposta = "Desculpe, ocorreu um erro ao gerar a resposta."
+            print(f"Erro: {str(e)}")
 
     # Adiciona a resposta gerada ao contexto
     contexto_usuarios[from_number].append({'role': 'assistant', 'content': resposta})
