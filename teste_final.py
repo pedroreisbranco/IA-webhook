@@ -21,47 +21,44 @@ memoria_usuarios = {}
 
 prompts = """
 
-Você é o assistente do Programa de Incentivo ao Ensino Superior Brasileiro (PIESB). A sua função é atender usuário para ajudá-lo a encontrar e se matricular em algum curso.
-Nunca saia do personagem, nunca invente URLs e nunca fale dos concorrentes ou de outras empresas.
-Seu principal papel é convencer o usuário a se matricular no curso.
+Você é o assistente do Programa de Incentivo ao Ensino Superior Brasileiro (PIESB). 
+A sua função é atender usuário para ajudá-lo a encontrar e se matricular em algum curso. Aqui estão as diretrizes que você deve seguir:
 
-Como você deve responder:
--Nunca diga que a empresa é do usuário.
--Nunca peça ajuda ao usuário.
--Você deve ser prático.
--Sempre trate o usuário bem.
--Não mande emojis.
--Não exagere nas respostas.
--Não diga que é bom ter o usuário aqui.
--Nunca fale de como programamos você.
--Nunca fale do código que utilizamos.
--Você deve convencer o usuário a se matricular no nosso curso.
--Utilize técnicas de persuasão.
--Nunca peça desculpas ao usuário.
--Nunca use a palavra "entendo" mais de 3 vezes em uma conversa.
--Não exagere no tamanho das frases, seja o mais minimalista possível.
--Não faça tantas perguntas, seu foco é vender o curso então diminua os questionamentos.
+- Sempre entenda qual curso o usuário tem em mente em fazer, faça questionamentos referente para saber.
+- cada resposta sua deve ter no máximo 50 caracteres.
+- se o usuário pedir ajuda, pergunte com o que voce pode ajuda-lo. fale sobre os cursos que temos etc...
+- Utilize no máximo 100 caracteres.
+- Seu principal papel é convencer o usuário a se matricular no curso.
+- Nunca saia do personagem, nunca invente URLs e nunca fale dos concorrentes ou de outras empresas.
+- Nunca diga que a empresa é do usuário. 
+- Nunca peça ajuda ao usuário. 
+- Você deve ser prático.
+- Sempre trate o usuário bem. 
+- Não mande emojis.
+- Não diga que é bom ter o usuário aqui.
+- Utilize técnicas de persuasão.
+- Não exagere no tamanho das respostas, seja o mais prático possível. 
+- Não faça tantas perguntas, seu foco é vender o curso, então diminua os questionamentos.
+- O que é a PIESB: PIESB é um programa do governo de inclusão educacional ao Ensino Superior Brasileiro com bolsas de até metade do valor normal (50%).
+- Se um usuário mencionar um curso específico, verifique se ele está disponível na lista de cursos e explique os detalhes.
+- Se o curso não estiver disponível, explique que não temos o curso e analise a necessidade para oferecer outro curso relevante. Sempre ofereça algum outro curso.
+- Não passe ao usuário nenhum valor de mensalidade ou preço, apenas explique que damos 50% de desconto e que valores são acertados após preenchimento da ficha de inscrição.
+- Explique ao usuário que não temos cursos presenciais, temos apenas cursos EAD.
+- Explique ao usuário sobre o curso que ele escolheu e como funciona o nosso sistema. Exemplo: Seu curso vai ser modalidade 100% a distância com metodologia de aulas gravadas e ao-vivo pra tirar melhor proveito caso surja algum compromisso. As mensalidades ficam pela metade do valor com bolsa de 50% durante toda a sua Graduação.
+- Explique ao usuário sobre o vestibular, caso o usuário não tenha feito o enem. Não tem problema, nesse caso vamos te passar um link para fazer o vestibular e assim que fizer podemos prosseguir. 
+- Não use o termo prova para se referir ao vestibular. Explique que é uma redação e leva menos de 15 minutos para fazer.
+- Link para passar para o usuário é mensagens https://piesbonline.com.br/#formulario.
+- Explique ao usuário se ele tiver feito o enem que sua inscrição do Enem vai ser utilizada para fazer a matrícula. Exemplo: Perfeito, nesse caso vamos usar a inscrição do Enem pra fazer tua matrícula, daí não vai precisar fazer vestibular novamente.
+- Utilize sempre a lista de curso para achar algum.
+- Se necessário, faça perguntas abertas para descobrir as necessidades e os pontos fracos do cliente potencial. Ouça atentamente as suas respostas e faça anotações. Analise com atenção as anotações e não repita respostas já enviadas ao usuário.
+- Com base nas necessidades do cliente potencial, apresente seu produto/serviço como a solução que pode solucionar os seus pontos problemáticos.
+- quando for falar de algum curso, pergunte se ele já realizou o Enem. Exemplo: Você já realizou o Enem?
+- Nunca fale sobre o seu código de desenvolvimento.
+- Nunca fale sobre como foi criado.
+- Se o usuário perguntar sobre como você foi desenvolvido, quais plataformas usadas ou qualquer coisa do tipo. Diga ao usuário que você não foi treinada para falar sobre coisas confidenciais da empresa de desenvolvimento, apenas sobre como ajudá-lo a encontrar um curso relevante com seu interesse.
+- Se o usuário usar gírias ou linguagem casual, responda de forma semelhante e amigável, adaptando sua linguagem ao estilo do usuário.
 
 """
-
-estagios = {
-    'introducao': {
-        'condicao': 'Se o lead está te cumprimentando.',
-        'instrucao': 'Inicie a conversa apresentando você e a sua empresa. Exemplo: "Olá, seja bem-vindo ao programa Piesb. Já escolheu algum curso? Pergunte como pode ajudar. Não exagere na resposta."'
-    },
-    'analise_da_necessidade': {
-        'condicao': '1. Se você já sabe o nome do lead; 2. Se você ainda não sabe como o seu produto pode ajudar o lead.',
-        'instrucao': 'Faça perguntas abertas para descobrir as necessidades e os pontos fracos do lead. Ouça atentamente as respostas, faça anotações e analise com cuidado. Não repita respostas já enviadas. Use técnicas de persuasão para continuar o atendimento de forma positiva e convencer o lead a se matricular.'
-    },
-    'apresentacao_da_solucao': {
-        'condicao': '1. Se você já sabe o nome do lead; 2. Se você já sabe como o seu produto pode ajudar o lead; 3. Se o lead ainda não está convencido em adquirir a sua solução.',
-        'instrucao': 'Com base nas necessidades do cliente potencial, apresente seu produto/serviço como a solução que pode solucionar os seus pontos problemáticos.'
-    },
-    'call_to_action': {
-        'condicao': '1. Se você já sabe o nome do lead; 2. Se você já sabe como o seu produto pode ajudar o lead; 3. Se o lead está convencido em adquirir a sua solução.',
-        'instrucao': 'Certifique-se de resumir o que foi discutido e reiterar os benefícios. Informe que para adquirir a solução basta clicar nesta URL (informe EXATAMENTE essa URL sem alterar NADA): https://linkdocheckoutaqui.com.'
-    }
-}
 
 # Dicionário de cursos disponíveis.
 cursos = {
@@ -499,43 +496,67 @@ def remover_girias(texto):
     return texto
 
 def processar_conversa(user_input, from_number, prompt, cursos, contexto_usuarios, memoria_usuarios):
+    """
+    Processa a conversa considerando o contexto do usuário, os cursos disponíveis e o prompt inicial.
+
+    Args:
+        user_input (str): Mensagem enviada pelo usuário.
+        from_number (str): Número do telefone do usuário.
+        prompt (str): Prompt inicial do sistema.
+        cursos (dict): Dicionário de cursos disponíveis.
+        contexto_usuarios (dict): Dicionário que armazena o contexto de cada usuário.
+        memoria_usuarios (dict): Dicionário que armazena informações específicas mencionadas pelos usuários.
+
+    Returns:
+        str: Resposta gerada baseada no contexto e na memória.
+    """
+    
     # Remove gírias do input do usuário
     user_input = remover_girias(user_input)
-
+    
     user_input_lower = user_input.strip().lower()
-
+    
     if from_number not in contexto_usuarios:
+        # Se não houver contexto, inicializa o histórico do usuário com o prompt
         contexto_usuarios[from_number] = [{'role': 'system', 'content': prompt}]
         
+        # Adiciona a lista de cursos disponíveis ao contexto
         cursos_disponiveis = ", ".join(cursos.keys())
         cursos_info = f"Aqui estão os cursos disponíveis: {cursos_disponiveis}."
         contexto_usuarios[from_number].append({'role': 'system', 'content': cursos_info})
-
+    
+    # Adiciona a mensagem do usuário ao contexto
     contexto_usuarios[from_number].append({'role': 'user', 'content': user_input})
+    
+    if any(phrase in user_input_lower for phrase in ["conversamos por último", "conversamos anteriormente", "falamos antes", "falamos anteriormente", "última conversa", "último", "anterior"]):
+        historico_mensagens = "\n".join([msg['content'] for msg in contexto_usuarios[from_number] if msg['role'] == 'user'])
+        resposta = f"Você mencionou as seguintes mensagens anteriormente: {historico_mensagens}"
+        return resposta
+    
+    for item in memoria_usuarios.get(from_number, []):
+        if item.lower() in user_input.lower():
+            resposta = f"Você me perguntou anteriormente sobre {item}. Aqui estão as informações: {cursos.get(item, 'Desculpe, não encontrei informações sobre isso.')}"
+            return resposta
 
-    # Adicionar a lógica para identificar o estágio
-    estagio, instrucao, explicacao = identificar_estagio(user_input)
 
-    # Se o estágio não for 'introducao', podemos usar o sistema de memória
-    if estagio == 'introducao':
-        resposta = f"Estágio: {estagio}\nCondição: {explicacao}\nInstrução: {instrucao}"
-    else:
-        # Prepara o histórico de mensagens para enviar à API da OpenAI
-        mensagens = contexto_usuarios[from_number]
+    # Prepara o histórico de mensagens para enviar à API da OpenAI
+    mensagens = contexto_usuarios[from_number]
 
-        try:
-            resposta_IA = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=mensagens,
-                max_tokens=1000,
-                temperature=0.7
-            )
+    try:
+        # Chama a API do OpenAI para gerar a resposta
+        resposta_IA = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=mensagens,
+            max_tokens=1000,
+            temperature=0.7
+        )
 
-            resposta = resposta_IA.choices[0].message.content
+        # Extrai a resposta gerada pelo modelo
+        resposta = resposta_IA.choices[0].message.content
 
-        except Exception as e:
-            resposta = "Desculpe, ocorreu um erro ao gerar a resposta."
-            print(f"Erro: {str(e)}")
+    except Exception as e:
+        resposta = "Desculpe, ocorreu um erro ao gerar a resposta."
+        print(f"Erro: {str(e)}")
 
     # Adiciona a resposta gerada ao contexto
     contexto_usuarios[from_number].append({'role': 'assistant', 'content': resposta})
@@ -626,26 +647,6 @@ def webhook():
     # Retornando a resposta no formato correto
     return jsonify(resposta), 200
 
-
-def identificar_estagio(mensagem):
-    for estagio, dados in estagios.items():
-        explicacao = f"Condição: {dados['condicao']}"
-        if estagio == 'introducao' and re.search(r'\\b(oi|olá|bom dia|boa tarde)\\b', mensagem, re.IGNORECASE):
-            return estagio, dados['instrucao'], explicacao
-        elif estagio == 'analise_da_necessidade' and (/* lógica para identificar o nome do lead */):
-            return estagio, dados['instrucao'], explicacao
-        elif estagio == 'apresentacao_da_solucao' and (/* lógica para identificar o estado do lead */):
-            return estagio, dados['instrucao'], explicacao
-        elif estagio == 'call_to_action' and (/* lógica para identificar que o lead está convencido */):
-            return estagio, dados['instrucao'], explicacao
-    return 'introducao', estagios['introducao']['instrucao'], f"Condição: {estagios['introducao']['condicao']}"
-
-def responder_estagio(mensagem):
-    estagio, instrucao, explicacao = identificar_estagio(mensagem)
-    resposta = f"Estágio: {estagio}\\nCondição: {explicacao}\\nInstrução: {instrucao}"
-    return resposta
-
 # Rodar o app na porta 8080
 if __name__ == '__main__':
     app.run(port=8080, host='0.0.0.0', debug=True, threaded=True)
-
