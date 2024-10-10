@@ -60,25 +60,6 @@ A sua função é atender usuário para ajudá-lo a encontrar e se matricular em
 
 """
 
-estagios = {
-    'introducao': {
-        'condicao': 'Se o lead está te cumprimentando.',
-        'instrucao': 'Inicie a conversa apresentando você e a sua empresa. Exemplo: "Olá, seja bem-vindo ao programa Piesb. Já escolheu algum curso? Pergunte como pode ajudar. Não exagere na resposta."'
-    },
-    'analise_da_necessidade': {
-        'condicao': '1. Se você já sabe o nome do lead; 2. Se você ainda não sabe como o seu produto pode ajudar o lead.',
-        'instrucao': 'Faça perguntas abertas para descobrir as necessidades e os pontos fracos do lead. Ouça atentamente as respostas, faça anotações e analise com cuidado. Não repita respostas já enviadas. Use técnicas de persuasão para continuar o atendimento de forma positiva e convencer o lead a se matricular.'
-    },
-    'apresentacao_da_solucao': {
-        'condicao': '1. Se você já sabe o nome do lead; 2. Se você já sabe como o seu produto pode ajudar o lead; 3. Se o lead ainda não está convencido em adquirir a sua solução.',
-        'instrucao': 'Com base nas necessidades do cliente potencial, apresente seu produto/serviço como a solução que pode solucionar os seus pontos problemáticos.'
-    },
-    'call_to_action': {
-        'condicao': '1. Se você já sabe o nome do lead; 2. Se você já sabe como o seu produto pode ajudar o lead; 3. Se o lead está convencido em adquirir a sua solução.',
-        'instrucao': 'Certifique-se de resumir o que foi discutido e reiterar os benefícios. Informe que para adquirir a solução basta clicar nesta URL (informe EXATAMENTE essa URL sem alterar NADA): https://linkdocheckoutaqui.com.'
-    }
-}
-
 # Dicionário de cursos disponíveis.
 cursos = {
     "ADMINISTRAÇÃO": {
@@ -669,22 +650,3 @@ def webhook():
 # Rodar o app na porta 8080
 if __name__ == '__main__':
     app.run(port=8080, host='0.0.0.0', debug=True, threaded=True)
-
-
-def identificar_estagio(mensagem):
-    for estagio, dados in estagios.items():
-        explicacao = f"Condição: {dados['condicao']}"
-        if estagio == 'introducao' and re.search(r'\\b(oi|olá|bom dia|boa tarde)\\b', mensagem, re.IGNORECASE):
-            return estagio, dados['instrucao'], explicacao
-        elif estagio == 'analise_da_necessidade' and (/* lógica para identificar o nome do lead */):
-            return estagio, dados['instrucao'], explicacao
-        elif estagio == 'apresentacao_da_solucao' and (/* lógica para identificar o estado do lead */):
-            return estagio, dados['instrucao'], explicacao
-        elif estagio == 'call_to_action' and (/* lógica para identificar que o lead está convencido */):
-            return estagio, dados['instrucao'], explicacao
-    return 'introducao', estagios['introducao']['instrucao'], f"Condição: {estagios['introducao']['condicao']}"
-
-def responder_estagio(mensagem):
-    estagio, instrucao, explicacao = identificar_estagio(mensagem)
-    resposta = f"Estágio: {estagio}\\nCondição: {explicacao}\\nInstrução: {instrucao}"
-    return resposta
