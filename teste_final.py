@@ -734,6 +734,3 @@ def webhook():
     # Retornando a resposta no formato correto
     return jsonify(resposta), 200
 
-# Rodar o app na porta 8080
-if __name__ == '__main__':
-    app.run(port=8080, host='0.0.0.0', debug=True, threaded=True)
