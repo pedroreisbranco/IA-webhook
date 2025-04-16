@@ -43,7 +43,7 @@ def buscar_imagem_semelhante(caminho_imagem):
 
     nome_arquivo = nomes[idx[0][0]]
 
-    exata = distancia <= 33
+    exata = distancia <= 1
     match = "exata" if exata else "semelhante"
 
     return {
