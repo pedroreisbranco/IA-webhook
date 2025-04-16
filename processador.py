@@ -1,9 +1,12 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 import clip
 import torch
 from PIL import Image
 import numpy as np
 import faiss
-import os
+
 
 device = "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
