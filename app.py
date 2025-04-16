@@ -1,7 +1,8 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from fastapi import FastAPI, UploadFile, File
 from processador import buscar_imagem_semelhante
 import shutil
-
 app = FastAPI()
 
 @app.post("/comparar")
