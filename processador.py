@@ -31,18 +31,24 @@ def criar_index(diretorio):
 # Carrega index e nomes
 index, nomes = criar_index("db_images")
 
-def buscar_imagem_semelhante(caminho_imagem):
+def buscar_imagem_semelhante(caminho_imagem, limiar=0.25):
     vetor = imagem_para_vetor(caminho_imagem)
     dist, idx = index.search(vetor.astype('float32'), 1)
     
     nome_arquivo = nomes[idx[0][0]]
     distancia = float(dist[0][0])
 
-    # Defina aqui o limite que você considera "exato"
-    exata = distancia <= 0.25
+    # Lógica de classificação da imagem
+    if distancia <= limiar:
+        match = "exata"
+    elif distancia > limiar and distancia <= 1.0:
+        match = "semelhante"
+    else:
+        match = "nenhuma relação"
 
     return {
         "nome_arquivo": nome_arquivo,
         "distancia": distancia,
-        "exata": exata
+        "match": match,
+        "exata": distancia <= limiar  # Marca como exata se a distância for menor ou igual a 0.25
     }
