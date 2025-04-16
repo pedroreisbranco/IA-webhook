@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pillow
+torch
+faiss-cpu
+git+https://github.com/openai/CLIP.git
+python-multipart
+opencv-python
+numpy
