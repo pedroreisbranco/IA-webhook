@@ -38,16 +38,21 @@ def buscar_imagem_semelhante(caminho_imagem):
     nome_arquivo = nomes[idx[0][0]]
     distancia = float(dist[0][0])
 
-    # Defina um limiar maior para similaridade
-    limite_similar = 0.5  # Ajuste conforme necessário
+    # Definindo limites de similaridade mais flexíveis
+    limite_exata = 0.3  # Aumente esse valor para permitir mais variações
+    limite_similar = 0.6  # Aumente o limite de similaridade para permitir mais variações
 
-    # Defina se é exata ou semelhante
-    exata = distancia <= 0.25
-    match = "exata" if exata else ("semelhante" if distancia <= limite_similar else "nenhuma relação")
+    # Defina se é exata, semelhante ou nenhuma relação
+    if distancia <= limite_exata:
+        match = "exata"
+    elif distancia <= limite_similar:
+        match = "semelhante"
+    else:
+        match = "nenhuma relação"
 
     return {
         "nome_arquivo": nome_arquivo,
         "distancia": distancia,
         "match": match,
-        "exata": exata
+        "exata": (match == "exata")
     }
