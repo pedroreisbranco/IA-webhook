@@ -39,8 +39,8 @@ def buscar_imagem_semelhante(caminho_imagem):
     distancia = float(dist[0][0])
 
     # Ajuste de limites
-    limite_exata = 33.0  # Limite para exata
-    limite_similar = 40.0  # Limite para semelhante
+    limite_exata = 0.25  # Limite para exata
+    limite_similar = 35  # Limite para semelhante
 
     # Decisão sobre exata, semelhante ou nenhuma relação
     if distancia <= limite_exata:
