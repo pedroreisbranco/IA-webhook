@@ -11,17 +11,12 @@ app = FastAPI()
 async def comparar(file: UploadFile = File(...)):
     caminho_temp = f"temp/{file.filename}"
     
-    # Salva a imagem temporária
     with open(caminho_temp, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     
-    # Chama a função de comparação de imagem
     resultado = buscar_imagem_semelhante(caminho_temp)
-    
-    # Retorna o resultado, no caso, os dados da imagem e o tipo de correspondência
-    return {
-        "nome_arquivo": resultado["nome_arquivo"],
-        "distancia": resultado["distancia"],
-        "match": resultado["match"],
-        "exata": resultado["exata"]
-    }
+
+    if resultado is None:
+        return {"mensagem": "Nenhuma imagem relacionada encontrada."}
+
+    return resultado
