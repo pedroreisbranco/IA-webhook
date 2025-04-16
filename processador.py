@@ -7,7 +7,6 @@ from PIL import Image
 import numpy as np
 import faiss
 
-
 device = "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 
@@ -35,4 +34,15 @@ index, nomes = criar_index("db_images")
 def buscar_imagem_semelhante(caminho_imagem):
     vetor = imagem_para_vetor(caminho_imagem)
     dist, idx = index.search(vetor.astype('float32'), 1)
-    return nomes[idx[0][0]]
+    
+    nome_arquivo = nomes[idx[0][0]]
+    distancia = float(dist[0][0])
+
+    # Defina aqui o limite que você considera "exato"
+    exata = distancia <= 0.25
+
+    return {
+        "nome_arquivo": nome_arquivo,
+        "distancia": distancia,
+        "exata": exata
+    }
