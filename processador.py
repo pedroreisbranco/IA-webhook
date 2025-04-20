@@ -19,16 +19,21 @@ def imagem_para_vetor(img_path):
 def criar_index(diretorio):
     nomes = []
     vetores = []
-    for root, _, files in os.walk(diretorio):  # Varrendo subpastas
-        for file in files:
-            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.webp')):  # Aceita apenas imagens
-                caminho = os.path.join(root, file)
-                try:
-                    vetor = imagem_para_vetor(caminho)
-                    nomes.append(os.path.relpath(caminho, diretorio))  # nome relativo à pasta principal
-                    vetores.append(vetor[0])
-                except Exception as e:
-                    print(f"Erro ao processar {caminho}: {e}")
+
+    for root, _, files in os.walk(diretorio):
+        for nome in files:
+            caminho = os.path.join(root, nome)
+
+            try:
+                vetor = imagem_para_vetor(caminho)
+                nomes.append(nome)  # Só o nome do arquivo, sem subpasta
+                vetores.append(vetor[0])
+            except Exception as e:
+                print(f"Erro ao processar {caminho}: {e}")
+
+    if not vetores:
+        raise ValueError("Nenhuma imagem válida encontrada.")
+
     index = faiss.IndexFlatL2(len(vetores[0]))
     index.add(np.array(vetores).astype('float32'))
     return index, nomes
@@ -48,7 +53,7 @@ def buscar_imagem_semelhante(caminho_imagem):
 
     nome_arquivo = nomes[idx[0][0]]
 
-    exata = distancia <= 1
+    exata = distancia <= 2
     match = "exata" if exata else "semelhante"
 
     return {
