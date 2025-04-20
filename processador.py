@@ -19,11 +19,16 @@ def imagem_para_vetor(img_path):
 def criar_index(diretorio):
     nomes = []
     vetores = []
-    for nome in os.listdir(diretorio):
-        caminho = os.path.join(diretorio, nome)
-        vetor = imagem_para_vetor(caminho)
-        nomes.append(nome)
-        vetores.append(vetor[0])
+    for root, _, files in os.walk(diretorio):  # Varrendo subpastas
+        for file in files:
+            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.webp')):  # Aceita apenas imagens
+                caminho = os.path.join(root, file)
+                try:
+                    vetor = imagem_para_vetor(caminho)
+                    nomes.append(os.path.relpath(caminho, diretorio))  # nome relativo à pasta principal
+                    vetores.append(vetor[0])
+                except Exception as e:
+                    print(f"Erro ao processar {caminho}: {e}")
     index = faiss.IndexFlatL2(len(vetores[0]))
     index.add(np.array(vetores).astype('float32'))
     return index, nomes
